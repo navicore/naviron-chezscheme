@@ -1,0 +1,16 @@
+script:
+  - docker build -t navicore/naviron-chezscheme .
+
+services:
+  - docker
+
+sudo: required
+
+after_success:
+  - if [ "$TRAVIS_BRANCH" == "master" ]; then
+    docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD";
+    docker push "navicore/naviron-chezscheme";
+    docker tag "navicore/naviron-chezscheme" "navicore/naviron-chezscheme:0.1.$TRAVIS_BUILD_NUMBER";
+    docker push "navicore/naviron-chezscheme:0.1.$TRAVIS_BUILD_NUMBER";
+    fi
+
